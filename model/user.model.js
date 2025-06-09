@@ -4,14 +4,10 @@ const userSchema = new mongoose.Schema(
   {
     fname: {
       type: String,
-      required: false,
       trim: true,
     },
     lname: {
       type: String,
-      required: true,
-      unique: true,
-      lowercase: true,
       trim: true,
     },
     email: {
@@ -20,10 +16,12 @@ const userSchema = new mongoose.Schema(
       unique: true,
       lowercase: true,
       trim: true,
+      match: [/^\S+@\S+\.\S+$/, 'Please use a valid email address'],
     },
     password: {
       type: String,
       required: true,
+      minlength: 6,
     },
     profilePic: {
       type: String,
@@ -42,9 +40,13 @@ const userSchema = new mongoose.Schema(
       type: Boolean,
       default: true,
     },
+    phone: {
+      type: String,
+      trim: true,
+    }
   },
   {
-    timestamps: true, 
+    timestamps: true,
   }
 );
 

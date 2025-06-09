@@ -14,7 +14,21 @@ const subcategorySchema = new mongoose.Schema(
       lowercase: true,
       trim: true,
     },
-    description: {
+   
+    subCategoryRank:{
+      type:Number,
+      required:true,
+      unique:true
+    },
+    isActivated:{
+      type:Boolean,
+      default:true
+    },
+    hasPosts:{
+      type:Boolean,
+      default:true
+    },
+     description: {
       type: String,
       default: '',
     },
@@ -23,9 +37,23 @@ const subcategorySchema = new mongoose.Schema(
       ref: 'Category',
       required: true,
     },
+      metaData: {
+      metaTitle: {
+        type: String,
+        default: '',
+      },
+      metaDescription: {
+        type: String,
+        default: '',
+      },
+      metaKeywords: {
+        type: [String],
+        default: [],
+      },
+    },
   },
   {
-    timestamps: true, // adds createdAt and updatedAt
+    timestamps: true, 
   }
 );
 
