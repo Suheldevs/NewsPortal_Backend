@@ -1,20 +1,37 @@
+// routes/user.route.js
 import express from 'express';
-import { sendResponse } from '../utils/sendResponse.js';
-import { AppError } from '../utils/AppError.js';
+import {
+  signUp,
+  signIn,
+  getAllUsers,
+  getUserById,
+  updateUser,
+  updatePassword,
+  deleteUser,
+  permanentDeleteUser,
+  reactivateUser
+} from '../controllers/user.controller.js';
+import { validateSignUp, validateSignIn, validateUpdateUser } from '../middleware/validation.middleware.js';
+import { authenticateToken, authorizeRoles } from '../middleware/auth.middleware.js';
 
 const router = express.Router();
 
-router.get('/sample', (req, res, next) => {
-  try {
-    const data = { name: 'Suhel', role: 'Developer' };
-    sendResponse(res, 200, 'Data fetched successfully', data);
-  } catch (error) {
-    next(new AppError('Something went wrong', 500));
-  }
-});
+// Public Routes
+router.post('/signup', validateSignUp, signUp);
+router.post('/signin', validateSignIn, signIn);
 
-router.get('/error', (req, res, next) => {
-  next(new AppError('This is a custom error', 400, ['Invalid input']));
-});
+// Protected Routes (Require Authentication)
+router.use(authenticateToken); // All routes below require authentication
+
+// User Profile Routes
+router.get('/profile/:id', getUserById);
+router.put('/profile/:id', validateUpdateUser, updateUser);
+router.put('/password/:id', updatePassword);
+
+// Admin Only Routes
+router.get('/', authorizeRoles(['admin']), getAllUsers);
+router.delete('/:id', authorizeRoles(['admin']), deleteUser);
+router.delete('/permanent/:id', authorizeRoles(['admin']), permanentDeleteUser);
+router.put('/reactivate/:id', authorizeRoles(['admin']), reactivateUser);
 
 export default router;

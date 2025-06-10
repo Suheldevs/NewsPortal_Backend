@@ -5,6 +5,7 @@ const userSchema = new mongoose.Schema(
     fname: {
       type: String,
       trim: true,
+      required:true
     },
     lname: {
       type: String,
