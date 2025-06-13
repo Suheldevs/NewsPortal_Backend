@@ -1,0 +1,1 @@
+import {createArticle} from '../controller/article.controller.js'

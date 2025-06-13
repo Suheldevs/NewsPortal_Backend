@@ -16,7 +16,6 @@ const articleSchema = new mongoose.Schema(
     },
     thumbnail: {
       type: String,
-      required: false,
     },
     content: {
       type: String,
@@ -24,22 +23,18 @@ const articleSchema = new mongoose.Schema(
     },
     summary: {
       type: String,
-      required: false,
     },
     authorId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',
-      required: true,
     },
     categoryId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Category',
-      required: true,
     },
     subcategoryId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Subcategory',
-      required: false,
     },
     tags: {
       type: [String],
@@ -56,12 +51,10 @@ const articleSchema = new mongoose.Schema(
     state: {
       type: mongoose.Schema.Types.ObjectId,
       ref:'state',
-      required: false,
     },
     city: {
       type: mongoose.Schema.Types.ObjectId,
       ref:'city',
-      required: false,
     },
     status: {
       type: String,
@@ -82,7 +75,6 @@ const articleSchema = new mongoose.Schema(
     },
     readingTime: {
       type: String,
-      required: false,
     },
     seo: {
       metaTitle: {
@@ -100,6 +92,7 @@ const articleSchema = new mongoose.Schema(
     },
     publishedAt: {
       type: Date,
+      default:Date.now()
     },
   },
   {

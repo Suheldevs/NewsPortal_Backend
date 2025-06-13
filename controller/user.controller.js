@@ -1,22 +1,23 @@
-import User from '../models/user.model.js';
-import bcrypt from 'bcrypt';
+import User from '../model/user.model.js';
+import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { sendResponse } from '../utils/sendResponse.js';
 import { AppError } from '../utils/AppError.js';
 
 
-export const signUp = async (req, res, next) => {
+export const signUp = async(req, res, next) => {
   try {
     const { fname, lname, email, password, phone, bio, profilePic } = req.body;
-
+    if(!email || !password){
+     throw new AppError('Please Enter a Valid Email or Password', 400)
+    }
     const existingUser = await User.findOne({ email });
     if (existingUser) {
       throw new AppError('User already exists with this email', 400);
     }
-
-    const hashedPassword = await bcrypt.hash(password);
-
-    // Create new user
+// const salt = bcrypt.genSaltSync(10);
+// const hash = bcrypt.hashSync("B4c0/\/", salt);
+    const hashedPassword = bcrypt.hashSync(password);
     const newUser = new User({
       fname,
       lname,
@@ -29,7 +30,6 @@ export const signUp = async (req, res, next) => {
 
     await newUser.save();
 
-    // Remove password from response
     const userResponse = newUser.toObject();
     delete userResponse.password;
 
@@ -73,7 +73,7 @@ export const signIn = async (req, res, next) => {
         email: user.email, 
         role: user.role 
       },
-      process.env.JWT_SECRET || 'your_jwt_secret_key',
+      process.env.JWT_SECRET,
       { expiresIn: '7d' }
     );
 

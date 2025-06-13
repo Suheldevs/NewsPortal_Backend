@@ -25,3 +25,11 @@ app.listen(Port,()=>{
     console.log(`Server is Running on port - ${Port}`)
 })
 db_Connection()
+
+
+
+
+//routes
+
+import UserRoutes from './routes/user.route.js'
+app.use('/api/user', UserRoutes)
