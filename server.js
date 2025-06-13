@@ -31,5 +31,10 @@ db_Connection()
 
 //routes
 
+//user
 import UserRoutes from './routes/user.route.js'
-app.use('/api/user', UserRoutes)
+app.use('/v1/user', UserRoutes)
+
+//Article
+import ArticleRoutes from './routes/article.route.js'
+app.use('/v1/article', ArticleRoutes)

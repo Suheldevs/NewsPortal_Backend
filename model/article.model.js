@@ -14,8 +14,13 @@ const articleSchema = new mongoose.Schema(
       lowercase: true,
       trim: true,
     },
-    thumbnail: {
+    thumbnail1: {
       type: String,
+      default:''
+    },
+    thumbnail2: {
+      type: String,
+      default:''
     },
     content: {
       type: String,
