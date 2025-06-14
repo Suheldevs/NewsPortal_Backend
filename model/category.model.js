@@ -10,7 +10,7 @@ const categorySchema = new mongoose.Schema(
     },
     categoryRank:{
       type:Number,
-      required:true,
+      // required:true,
       unique:true
     },
     isActivated:{

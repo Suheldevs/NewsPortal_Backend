@@ -181,6 +181,7 @@ const getArticleByState = async (req, res,next)=>{
   }
 }
 
+//get by tag
 const getArticleByTag = async(req,res,next)=>{
   try{
     const {tag , page = 0 } = req.query
@@ -194,6 +195,8 @@ const getArticleByTag = async(req,res,next)=>{
     next(err)
   }
 }
+
+
 
 //save article
 const createArticle = async (req, res, next) => {

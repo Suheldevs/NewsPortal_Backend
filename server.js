@@ -38,3 +38,7 @@ app.use('/v1/user', UserRoutes)
 //Article
 import ArticleRoutes from './routes/article.route.js'
 app.use('/v1/article', ArticleRoutes)
+
+//category
+import CategoryRoutes from './routes/category.route.js'
+app.use('/v1/category',CategoryRoutes)
