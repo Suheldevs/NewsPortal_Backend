@@ -6,7 +6,10 @@ import {createArticle,
   getArticleById,
   updateArticle,
   deleteArticle,
-  getArticlesByCategory} from '../controller/article.controller.js'
+  getArticlesByCategory,
+getArticleBySubCategory,
+getArticleByState,
+getArticleByTag} from '../controller/article.controller.js'
 
 router.post('/new/save', upload.single('thumbnail'), createArticle)
 
@@ -17,8 +20,19 @@ router.get('/getall', getAllArticles);
 // GET /api/articles/:id
 router.get('get/:id', getArticleById);
 
+//Get by category
 router.get('/',getArticlesByCategory)
 
+//get by subcategory
+router.get('/sub-category',getArticleBySubCategory)
+
+
+//get by city
+router.get('/city',getArticleByState)
+
+
+//get by tag
+router.get('/tag',getArticleByTag)
 
 // PUT /api/articles/:id
 router.put('/update/:id', upload.single('file'), updateArticle);

@@ -74,8 +74,126 @@ const getArticlesByCategory = async (req, res, next) => {
 };
 
 
+//get by subcategory
+const getArticleBySubCategory = async (req,res,next)=>{
+  try{
+    const {subcategory, page=0} = req.query
+    if(!subcategory){
+      throw new Error('Please provide a subcategory')
+    }
+    const articleData = await Article.aggregate([
+      {
+        $lookup:{
+          from:'subcategories',
+          localField:'subcategoryId',
+          foreignField:'_id',
+          as:'subcategoryData'
+        }
+      },
+      {$unwind:'$subcategoryData'},
+      {$match:{'subcategoryData.slug':subcategory}},
+      {$skip:Number(page) * 10},
+      {$limit:10},
+      {$project:{
+        title:1,
+        slug:1,
+        thumbnail1:1,
+        thumbnail2:1,
+         createdAt: 1,
+          'subcategoryData.title': 1,
+          'subcategoryData.slug': 1,
+      }}
+    ])
+    sendResponse(res, 200, "article fetch Successfully", articleData)
+  }
+  catch(err){
+    next(err)
+  }
+}
 
+//get by city
+const getArticleByCity = async (req, res,next)=>{
+  try{
+    const {city  , page=0} = req.query
+    if(!city){
+      throw new Error('Please Provide a City Name',400)
+    }
+    const Data = await Article.aggregate([
+      {$lookup:{
+        from:'cities',
+        localField:'cityId',
+        foreignField:'_id',
+        as:'cityData'
+      }},
+      {$unwind:'$cityData'},
+      {$match:{'cityData.slug':city}},
+      {$skip:Number(page)*10},
+      {$limit:10},
+       {$project:{
+        title:1,
+        slug:1,
+        thumbnail1:1,
+        thumbnail2:1,
+         createdAt: 1,
+          'cityData.title': 1,
+          'cityData.slug': 1,
+      }}
+    ])
+    sendResponse(res, 200, 'Data Fetch Successfull', Data)
+  }
+  catch(err){
+    next(err)
+  }
+}
 
+//get by state
+const getArticleByState = async (req, res,next)=>{
+  try{
+    const {state  , page=0} = req.query
+    if(!state){
+      throw new Error('Please Provide a State Name',400)
+    }
+    const Data = await Article.aggregate([
+      {$lookup:{
+        from:'states',
+        localField:'stateId',
+        foreignField:'_id',
+        as:'stateData'
+      }},
+      {$unwind:'$stateData'},
+      {$match:{'stateData.slug':state}},
+      {$skip:Number(page)*10},
+      {$limit:10},
+       {$project:{
+        title:1,
+        slug:1,
+        thumbnail1:1,
+        thumbnail2:1,
+         createdAt: 1,
+          'stateData.title': 1,
+          'stateData.slug': 1,
+      }}
+    ])
+    sendResponse(res, 200, 'Data Fetch Successfull', Data)
+  }
+  catch(err){
+    next(err)
+  }
+}
+
+const getArticleByTag = async(req,res,next)=>{
+  try{
+    const {tag , page = 0 } = req.query
+    if(!tag){
+      throw new Error('Please Provide a Tag')
+    }
+    const Data = await Article.find({tags:{$in:[tag]}})
+    sendResponse(res,200, 'Data fetch Successfull', Data)
+  }
+  catch(err){
+    next(err)
+  }
+}
 
 //save article
 const createArticle = async (req, res, next) => {
@@ -139,8 +257,6 @@ const createArticle = async (req, res, next) => {
         next(err);
     }
 };
-
-
 
 
 // Update Article
@@ -223,4 +339,4 @@ const deleteArticle = async (req, res, next) => {
   }
 };
 
-export { createArticle ,getAllArticles, getArticleById,updateArticle,deleteArticle,getArticlesByCategory };
+export { createArticle ,getAllArticles, getArticleById,updateArticle,deleteArticle,getArticlesByCategory, getArticleBySubCategory, getArticleByState, getArticleByTag };
