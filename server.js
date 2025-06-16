@@ -42,3 +42,7 @@ app.use('/v1/article', ArticleRoutes)
 //category
 import CategoryRoutes from './routes/category.route.js'
 app.use('/v1/category',CategoryRoutes)
+
+//sub-category
+import subcategoryRoutes from './routes/subcategory.route.js'
+app.use('/v1/sub-category',subcategoryRoutes)

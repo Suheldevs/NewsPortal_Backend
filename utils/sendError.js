@@ -4,6 +4,6 @@ export const sendError = (err, req, res, next) => {
     success: false,
     message: err.message || 'Internal Server Error',
     errors: err.errors || [],
-    stack: process.env.NODE_ENV === 'development' ? err.stack : undefined,
+    // stack: process.env.NODE_ENV === 'development' ? err.stack : undefined,
   });
 };

@@ -14,21 +14,20 @@ const subcategorySchema = new mongoose.Schema(
       lowercase: true,
       trim: true,
     },
-   
-    subCategoryRank:{
-      type:Number,
-      required:true,
-      unique:true
+    subCategoryRank: {
+      type: Number,
+      required: true,
+      unique: true,
     },
-    isActivated:{
-      type:Boolean,
-      default:true
+    isActivated: {
+      type: Boolean,
+      default: true,
     },
-    hasPosts:{
-      type:Boolean,
-      default:true
+    hasPosts: {
+      type: Boolean,
+      default: true,
     },
-     description: {
+    description: {
       type: String,
       default: '',
     },
@@ -37,7 +36,7 @@ const subcategorySchema = new mongoose.Schema(
       ref: 'Category',
       required: true,
     },
-      metaData: {
+    metaData: {
       metaTitle: {
         type: String,
         default: '',
@@ -53,8 +52,30 @@ const subcategorySchema = new mongoose.Schema(
     },
   },
   {
-    timestamps: true, 
+    timestamps: true,
   }
 );
+
+subcategorySchema.pre('save', async function (next) {
+  if (this.isNew && !this.subCategoryRank) {
+    try {
+      const maxRankSubcategory = await mongoose
+        .model('Subcategory')
+        .findOne({})
+        .sort({ subCategoryRank: -1 })
+        .select('subCategoryRank');
+
+      this.subCategoryRank = maxRankSubcategory
+        ? maxRankSubcategory.subCategoryRank + 1
+        : 1;
+
+      next();
+    } catch (err) {
+      next(err);
+    }
+  } else {
+    next();
+  }
+});
 
 export default mongoose.model('Subcategory', subcategorySchema);
